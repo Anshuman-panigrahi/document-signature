@@ -6,18 +6,13 @@ const documentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     filePath: {
       type: String,
       required: true,
     },
-    uploadedBy: {
-      type: String,
-      required: true,
-    },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model(

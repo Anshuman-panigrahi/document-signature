@@ -1,33 +1,25 @@
 const express = require("express");
-const multer = require("multer");
-
 const router = express.Router();
+
+const upload = require("../middleware/uploadMiddleware");
 
 const {
   uploadDocument,
+  getDocuments,
 } = require("../controllers/documentController");
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      Date.now() + "-" + file.originalname
-    );
-  },
-});
-
-const upload = multer({
-  storage,
-});
 
 router.post(
   "/upload",
-  upload.single("pdf"),
+  upload.single("document"),
   uploadDocument
 );
+
+router.get("/all", getDocuments);
+
+router.get("/test", (req, res) => {
+  res.json({
+    message: "Document Route Working",
+  });
+});
 
 module.exports = router;
