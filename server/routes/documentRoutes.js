@@ -6,6 +6,7 @@ const upload = require("../middleware/uploadMiddleware");
 const {
   uploadDocument,
   getDocuments,
+  deleteDocument,
 } = require("../controllers/documentController");
 
 router.post(
@@ -15,6 +16,11 @@ router.post(
 );
 
 router.get("/all", getDocuments);
+
+router.delete(
+  "/delete/:id",
+  deleteDocument
+);
 
 router.get("/test", (req, res) => {
   res.json({

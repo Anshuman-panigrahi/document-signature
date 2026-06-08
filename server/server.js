@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const documentRoutes = require("./routes/documentRoutes");
 const signatureRoutes = require("./routes/signatureRoutes");
+const auditRoutes = require("./routes/auditRoutes");
 
 dotenv.config();
 
@@ -35,6 +36,11 @@ app.use(
 app.use(
   "/api/signature",
   signatureRoutes
+);
+
+app.use(
+  "/api/audit",
+  auditRoutes
 );
 
 app.get("/", (req, res) => {

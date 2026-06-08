@@ -1,3 +1,4 @@
+const fs = require("fs");
 const Document = require("../models/Document");
 
 const uploadDocument = async (req, res) => {
@@ -31,7 +32,29 @@ const getDocuments = async (req, res) => {
   }
 };
 
+const deleteDocument = async (req, res) => {
+  try {
+    const document = await Document.findByIdAndDelete(req.params.id);
+
+    if (document && document.filePath) {
+      fs.unlink(document.filePath, (err) => {
+        if (err) console.error("Failed to delete PDF file from disk:", err);
+      });
+    }
+
+    res.status(200).json({
+      message: "Document Deleted",
+      document,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadDocument,
   getDocuments,
+  deleteDocument,
 };

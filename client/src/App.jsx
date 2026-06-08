@@ -5,16 +5,19 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import Viewer from "./pages/Viewer";
-import Audit from "./pages/Audit";
 import Signature from "./pages/Signature";
 import SignatureViewer from "./pages/SignatureViewer";
 import SignDocument from "./pages/SignDocument";
+import Audit from "./pages/Audit";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route
+          path="/"
+          element={<Login />}
+        />
 
         <Route
           path="/register"
@@ -37,11 +40,6 @@ function App() {
         />
 
         <Route
-          path="/audit"
-          element={<Audit />}
-        />
-
-        <Route
           path="/signature"
           element={<Signature />}
         />
@@ -54,6 +52,11 @@ function App() {
         <Route
           path="/sign-document"
           element={<SignDocument />}
+        />
+
+        <Route
+          path="/audit"
+          element={<Audit />}
         />
       </Routes>
     </BrowserRouter>

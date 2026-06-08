@@ -30,7 +30,23 @@ const getSignatures = async (req, res) => {
   }
 };
 
+const deleteSignature = async (req, res) => {
+  try {
+    const signature = await Signature.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      message: "Signature Deleted",
+      signature,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   saveSignature,
   getSignatures,
+  deleteSignature,
 };
