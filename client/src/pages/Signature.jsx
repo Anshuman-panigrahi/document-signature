@@ -138,11 +138,24 @@ function Signature() {
     let signatureImage = "";
 
     if (activeTab === "draw") {
-      if (sigRef.current.isEmpty()) {
+      // Manual empty check - more reliable than library's isEmpty() in alpha versions
+      const rawCanvas = sigRef.current.getCanvas();
+      const ctx = rawCanvas.getContext("2d");
+      const pixelData = ctx.getImageData(0, 0, rawCanvas.width, rawCanvas.height).data;
+      let hasDrawing = false;
+      for (let i = 3; i < pixelData.length; i += 4) {
+        if (pixelData[i] !== 0) {
+          hasDrawing = true;
+          break;
+        }
+      }
+      if (!hasDrawing) {
         alert("Please draw your signature before saving");
         return;
       }
-      const trimmedCanvas = sigRef.current.getTrimmedCanvas();
+      // Use our own trimCanvas instead of the library's getTrimmedCanvas
+      // which can be unreliable in alpha versions
+      const trimmedCanvas = trimCanvas(rawCanvas);
       signatureImage = trimmedCanvas.toDataURL("image/png");
     } else {
       if (!typedText.trim()) {
@@ -184,8 +197,9 @@ function Signature() {
       alert(data.message || "Signature saved successfully!");
       clearSignature();
     } catch (error) {
-      console.log(error);
-      alert("Failed to save signature. Please try again.");
+      console.error("Save signature error:", error);
+      const errorMsg = error.response?.data?.message || error.message || "Unknown error";
+      alert(`Failed to save signature: ${errorMsg}`);
     } finally {
       setSaving(false);
     }

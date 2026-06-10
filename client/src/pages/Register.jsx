@@ -66,7 +66,7 @@ function Register() {
             </label>
             <input
               type="text"
-              placeholder="John Doe"
+              placeholder=""
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all text-sm"
