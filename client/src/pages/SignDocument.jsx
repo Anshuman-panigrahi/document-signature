@@ -52,7 +52,9 @@ function SignDocument() {
       }
 
       setSigning(true);
-      const pdfUrl = `http://localhost:5000/${selectedPdf.filePath}`;
+      // Normalize backslashes from Windows paths stored in MongoDB
+      const normalizedPath = selectedPdf.filePath.replace(/\\/g, "/");
+      const pdfUrl = `http://localhost:5000/${normalizedPath}`;
 
       await downloadSignedPdf(
         pdfUrl,
