@@ -12,8 +12,6 @@ const auditRoutes = require("./routes/auditRoutes");
 
 dotenv.config();
 
-connectDB();
-
 const app = express();
 
 app.use(cors());
@@ -53,8 +51,19 @@ app.get("/", (req, res) => {
 const PORT =
   process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(
-    `Server running on port ${PORT}`
-  );
-});
+// Connect to DB first, then start server
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(
+        `Server running on port ${PORT}`
+      );
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
