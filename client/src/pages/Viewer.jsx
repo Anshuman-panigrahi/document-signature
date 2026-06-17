@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import API from "../services/api";
 import Navbar from "../components/Navbar";
 
 function Viewer() {
@@ -15,8 +15,8 @@ function Viewer() {
   const getDocuments = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        "http://localhost:5000/api/documents/all"
+      const { data } = await API.get(
+        "/api/documents/all"
       );
       setDocuments(data);
     } catch (error) {
@@ -28,8 +28,8 @@ function Viewer() {
 
   const deleteDoc = async (id) => {
     try {
-      await axios.delete(
-        `http://localhost:5000/api/documents/delete/${id}`
+      await API.delete(
+        `/api/documents/delete/${id}`
       );
 
       getDocuments();
@@ -138,7 +138,7 @@ function Viewer() {
                     <div className="space-y-2 mt-2">
                       <div className="flex items-center gap-3">
                         <a
-                          href={`http://localhost:5000/${doc.filePath}`}
+                          href={`${API.defaults.baseURL}/${doc.filePath.replace(/\\/g, "/")}`}
                           target="_blank"
                           rel="noreferrer"
                           className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium text-center transition-all cursor-pointer"

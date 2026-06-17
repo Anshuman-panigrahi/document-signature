@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../services/api";
 import { downloadSignedPdf } from "../services/pdfService";
 import Navbar from "../components/Navbar";
 
@@ -19,8 +19,8 @@ function SignDocument() {
 
   const getDocuments = async () => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:5000/api/documents/all"
+      const { data } = await API.get(
+        "/api/documents/all"
       );
       setDocuments(data);
     } catch (error) {
@@ -30,8 +30,8 @@ function SignDocument() {
 
   const getSignatures = async () => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:5000/api/signature/all"
+      const { data } = await API.get(
+        "/api/signature/all"
       );
       setSignatures(data);
     } catch (error) {
@@ -54,7 +54,7 @@ function SignDocument() {
       setSigning(true);
       // Normalize backslashes from Windows paths stored in MongoDB
       const normalizedPath = selectedPdf.filePath.replace(/\\/g, "/");
-      const pdfUrl = `http://localhost:5000/${normalizedPath}`;
+      const pdfUrl = `${API.defaults.baseURL}/${normalizedPath}`;
 
       await downloadSignedPdf(
         pdfUrl,
@@ -63,8 +63,8 @@ function SignDocument() {
 
       const auditorName = user?.name || "Anshuman Panigrahi";
 
-      await axios.post(
-        "http://localhost:5000/api/audit/create",
+      await API.post(
+        "/api/audit/create",
         {
           userName: auditorName,
           documentName: selectedPdf.fileName,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import API from "../services/api";
 import Navbar from "../components/Navbar";
 
 function SignatureViewer() {
@@ -14,8 +14,8 @@ function SignatureViewer() {
   const fetchSignatures = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        "http://localhost:5000/api/signature/all"
+      const { data } = await API.get(
+        "/api/signature/all"
       );
       setSignatures(data);
     } catch (error) {
@@ -27,8 +27,8 @@ function SignatureViewer() {
 
   const deleteSignature = async (id) => {
     try {
-      await axios.delete(
-        `http://localhost:5000/api/signature/delete/${id}`
+      await API.delete(
+        `/api/signature/delete/${id}`
       );
 
       fetchSignatures();

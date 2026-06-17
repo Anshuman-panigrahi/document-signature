@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import SignatureCanvas from "react-signature-canvas";
-import axios from "axios";
+import API from "../services/api";
 import Navbar from "../components/Navbar";
 
 // Helper function to trim empty space from a canvas
@@ -187,8 +187,8 @@ function Signature() {
 
     setSaving(true);
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/signature/save",
+      const { data } = await API.post(
+        "/api/signature/save",
         {
           signatureImage,
         }

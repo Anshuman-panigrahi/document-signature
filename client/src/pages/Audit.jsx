@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../services/api";
 import Navbar from "../components/Navbar";
 
 function Audit() {
@@ -13,8 +13,8 @@ function Audit() {
   const getLogs = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        "http://localhost:5000/api/audit/all"
+      const { data } = await API.get(
+        "/api/audit/all"
       );
       setLogs(data);
     } catch (error) {

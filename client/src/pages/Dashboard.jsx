@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import API from "../services/api";
 import Navbar from "../components/Navbar";
 
 function Dashboard() {
@@ -17,9 +17,9 @@ function Dashboard() {
     const fetchStats = async () => {
       try {
         const [docsRes, sigsRes, auditRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/documents/all"),
-          axios.get("http://localhost:5000/api/signature/all"),
-          axios.get("http://localhost:5000/api/audit/all"),
+          API.get("/api/documents/all"),
+          API.get("/api/signature/all"),
+          API.get("/api/audit/all"),
         ]);
         setStats({
           documents: docsRes.data.length,

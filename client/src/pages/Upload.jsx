@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import API from "../services/api";
 import Navbar from "../components/Navbar";
 
 function Upload() {
@@ -33,8 +33,8 @@ function Upload() {
     setUploading(true);
 
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/documents/upload",
+      const { data } = await API.post(
+        "/api/documents/upload",
         formData
       );
 
