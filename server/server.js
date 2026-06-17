@@ -64,7 +64,7 @@ app.use(
   auditRoutes
 );
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 
 // Start server FIRST, then connect to DB
 // This prevents Render from marking the service as failed if DB is slow
