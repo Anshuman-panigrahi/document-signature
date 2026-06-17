@@ -19,6 +19,7 @@ const app = express();
 app.use(
   cors({
     origin: [
+      "https://document-signature-delta.vercel.app",
       "https://document-signature-seven.vercel.app",
       "http://localhost:5173",
       "http://localhost:3000",
@@ -28,6 +29,8 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.options("*", cors());
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
