@@ -39,11 +39,15 @@ app.use(
   )
 );
 
-// Health check - responds even if DB is down
+// Health check routes
 app.get("/", (req, res) => {
+  res.send("Document Signature Backend Running 🚀");
+});
+
+app.get("/api/health", (req, res) => {
   res.status(200).json({
-    status: "OK",
-    message: "Document Signature API Running",
+    success: true,
+    message: "Backend is healthy",
   });
 });
 
