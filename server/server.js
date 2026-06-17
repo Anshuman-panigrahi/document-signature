@@ -51,6 +51,13 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+app.get("/api/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "Backend working",
+  });
+});
+
 app.use("/api/auth", authRoutes);
 
 app.use(
