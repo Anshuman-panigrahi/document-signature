@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 const Document = require("../models/Document");
 
 const uploadDocument = async (req, res) => {
@@ -11,7 +12,7 @@ const uploadDocument = async (req, res) => {
 
     const document = await Document.create({
       fileName: req.file.originalname,
-      filePath: req.file.path.replace(/\\/g, "/"),
+      filePath: "uploads/" + req.file.filename,
       uploadedBy: req.body.userName || "Anonymous",
     });
 
@@ -43,7 +44,9 @@ const deleteDocument = async (req, res) => {
     const document = await Document.findByIdAndDelete(req.params.id);
 
     if (document && document.filePath) {
-      fs.unlink(document.filePath, (err) => {
+      const filename = path.basename(document.filePath);
+      const absolutePath = path.join(__dirname, "../uploads/", filename);
+      fs.unlink(absolutePath, (err) => {
         if (err) console.error("Failed to delete PDF file from disk:", err);
       });
     }
