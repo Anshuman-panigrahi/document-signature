@@ -12,9 +12,6 @@ console.log("[API] Using backend URL:", API_URL);
 const API = axios.create({
   baseURL: API_URL,
   timeout: 30000, // 30 second timeout (Render free tier can be slow on cold start)
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 // Add request interceptor to include token

@@ -3,10 +3,16 @@ const Document = require("../models/Document");
 
 const uploadDocument = async (req, res) => {
   try {
+    if (!req.file) {
+      return res.status(400).json({
+        message: "No file uploaded or file format not supported. Please upload a PDF file.",
+      });
+    }
+
     const document = await Document.create({
       fileName: req.file.originalname,
       filePath: req.file.path.replace(/\\/g, "/"),
-      uploadedBy: req.body.userName,
+      uploadedBy: req.body.userName || "Anonymous",
     });
 
     res.status(201).json({
