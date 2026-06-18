@@ -1,6 +1,11 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "https://document-signature-backend-ezs5.onrender.com";
+let API_URL = import.meta.env.VITE_API_URL || "https://document-signature-backend-ezs5.onrender.com";
+
+// Force correct production backend URL to avoid old/incorrect environment variables in Vercel
+if (API_URL.includes("ozs5.onrender.com") || !API_URL) {
+  API_URL = "https://document-signature-backend-ezs5.onrender.com";
+}
 
 console.log("[API] Using backend URL:", API_URL);
 
