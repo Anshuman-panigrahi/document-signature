@@ -27,6 +27,8 @@ function Login() {
 
       alert(data.message || "Logged in successfully!");
 
+      // Store token and user info
+      localStorage.setItem("token", data.token);
       localStorage.setItem(
         "userInfo",
         JSON.stringify(data.user)
