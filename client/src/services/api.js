@@ -1,7 +1,15 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "https://document-signature-backend-ezs5.onrender.com";
+
+console.log("[API] Using backend URL:", API_URL);
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://document-signature-backend-ezs5.onrender.com",
+  baseURL: API_URL,
+  timeout: 30000, // 30 second timeout (Render free tier can be slow on cold start)
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 // Add request interceptor to include token
@@ -24,11 +32,14 @@ API.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expired or invalid
+    // Don't redirect on login/register endpoints (they naturally return 401 for bad credentials)
+    const isAuthEndpoint = error.config?.url?.includes("/api/auth/");
+    
+    if (error.response?.status === 401 && !isAuthEndpoint) {
+      // Token expired or invalid — clear and redirect to login page (route is "/")
       localStorage.removeItem("token");
       localStorage.removeItem("userInfo");
-      window.location.href = "/login";
+      window.location.href = "/";
     }
     return Promise.reject(error);
   }

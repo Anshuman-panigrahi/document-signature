@@ -4,6 +4,7 @@ function Navbar() {
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
   const logoutHandler = () => {
+    localStorage.removeItem("token");
     localStorage.removeItem("userInfo");
     window.location.href = "/";
   };

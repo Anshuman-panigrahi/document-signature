@@ -1,17 +1,20 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 
 function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!email || !password) {
-      alert("Please fill in all fields");
+      setError("Please fill in all fields");
       return;
     }
 
@@ -25,8 +28,6 @@ function Login() {
         }
       );
 
-      alert(data.message || "Logged in successfully!");
-
       // Store token and user info
       localStorage.setItem("token", data.token);
       localStorage.setItem(
@@ -34,12 +35,17 @@ function Login() {
         JSON.stringify(data.user)
       );
 
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } catch (error) {
-      alert(
-        error.response?.data?.message ||
-          "Login Failed"
-      );
+      console.error("Login error:", error);
+      if (error.code === "ERR_NETWORK" || error.code === "ECONNABORTED") {
+        setError("Cannot connect to server. The backend may be starting up — please try again in 30 seconds.");
+      } else {
+        setError(
+          error.response?.data?.message ||
+            "Login Failed. Please try again."
+        );
+      }
     } finally {
       setSubmitting(false);
     }
@@ -64,6 +70,13 @@ function Login() {
             Sign in to access your digital documents & secure signature vaults.
           </p>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm text-center">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={submitHandler} className="space-y-5">
           {/* Email input */}

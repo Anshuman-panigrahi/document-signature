@@ -9,22 +9,24 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!name || !email || !password || !confirmPassword) {
-      alert("Please fill in all fields");
+      setError("Please fill in all fields");
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      setError("Passwords do not match");
       return;
     }
 
     if (password.length < 6) {
-      alert("Password must be at least 6 characters");
+      setError("Password must be at least 6 characters");
       return;
     }
 
@@ -39,17 +41,19 @@ function Register() {
           confirmPassword,
         }
       );
-
-      alert(data.message || "Registration Successful!");
       
       // Store token and user info after successful registration
       localStorage.setItem("token", data.token);
       localStorage.setItem("userInfo", JSON.stringify(data.user));
       
-      navigate("/dashboard"); // Redirect to Dashboard instead of Login
+      navigate("/dashboard"); // Redirect to Dashboard
     } catch (error) {
-      console.log(error);
-      alert(error.response?.data?.message || "Registration Failed. Please try again.");
+      console.error("Register error:", error);
+      if (error.code === "ERR_NETWORK" || error.code === "ECONNABORTED") {
+        setError("Cannot connect to server. The backend may be starting up — please try again in 30 seconds.");
+      } else {
+        setError(error.response?.data?.message || "Registration Failed. Please try again.");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -74,6 +78,13 @@ function Register() {
             Register to start uploading files, drawing signatures, and sealing PDFs.
           </p>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm text-center">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={submitHandler} className="space-y-5">
           {/* Name input */}
